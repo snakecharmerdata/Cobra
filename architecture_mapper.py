@@ -128,62 +128,76 @@ class DetailWindow:
         self.parent = parent
         self.window = tk.Toplevel(parent)
         self.window.title(f"Function Details: {pill.name}")
-        self.window.geometry("700x650")
+        try:
+            self.window.configure(bg="#f2f2f2")
+        except Exception:
+            pass
+        # Set size and center on screen
+        w, h = 700, 650
+        try:
+            self.window.update_idletasks()
+            sw = self.window.winfo_screenwidth()
+            sh = self.window.winfo_screenheight()
+            x = max((sw - w) // 2, 0)
+            y = max((sh - h) // 2, 0)
+            self.window.geometry(f"{w}x{h}+{x}+{y}")
+        except Exception:
+            self.window.geometry(f"{w}x{h}")
         
         # Main frame
-        main_frame = ttk.Frame(self.window, padding="10")
-        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+        main_frame = tk.Frame(self.window, bg="#f2f2f2", highlightthickness=0)
+        main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
         
         # Function name
-        ttk.Label(main_frame, text="Function Name:").grid(row=0, column=0, sticky=tk.W, pady=5)
+        tk.Label(main_frame, text="Function Name:", bg="#f2f2f2", fg="#000000").grid(row=0, column=0, sticky=tk.W, pady=5)
         self.name_var = tk.StringVar(value=pill.name)
-        name_entry = ttk.Entry(main_frame, textvariable=self.name_var, width=40)
+        name_entry = tk.Entry(main_frame, textvariable=self.name_var, width=40, bg="#f2f2f2", fg="#000000", insertbackground="#000000")
         name_entry.grid(row=0, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=5)
         
         # Description
-        ttk.Label(main_frame, text="Description:").grid(row=1, column=0, sticky=tk.W, pady=5)
-        self.desc_text = tk.Text(main_frame, height=3, width=40)
+        tk.Label(main_frame, text="Description:", bg="#f2f2f2", fg="#000000").grid(row=1, column=0, sticky=tk.W, pady=5)
+        self.desc_text = tk.Text(main_frame, height=3, width=40, bg="#f2f2f2", fg="#000000", insertbackground="#000000")
         self.desc_text.grid(row=1, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=5)
         self.desc_text.insert("1.0", pill.description)
         
         # Inputs column
-        ttk.Label(main_frame, text="Inputs:", font=("Arial", 10, "bold")).grid(row=2, column=0, pady=10)
+        tk.Label(main_frame, text="Inputs:", font=("Arial", 10, "bold"), bg="#f2f2f2", fg="#000000").grid(row=2, column=0, pady=10)
         
         # Inputs listbox
-        self.inputs_listbox = tk.Listbox(main_frame, height=8)
+        self.inputs_listbox = tk.Listbox(main_frame, height=8, bg="#f2f2f2", fg="#000000", selectbackground="#c0c0c0", selectforeground="#000000")
         self.inputs_listbox.grid(row=3, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=5)
         
         # Input buttons
-        input_btn_frame = ttk.Frame(main_frame)
+        input_btn_frame = tk.Frame(main_frame, bg="#f2f2f2", highlightthickness=0)
         input_btn_frame.grid(row=4, column=0, pady=5)
         ttk.Button(input_btn_frame, text="Add", command=self.add_input).pack(side=tk.LEFT, padx=2)
         ttk.Button(input_btn_frame, text="Edit", command=self.edit_input).pack(side=tk.LEFT, padx=2)
         ttk.Button(input_btn_frame, text="Delete", command=self.delete_input).pack(side=tk.LEFT, padx=2)
         
         # Outputs column
-        ttk.Label(main_frame, text="Outputs:", font=("Arial", 10, "bold")).grid(row=2, column=2, pady=10)
+        tk.Label(main_frame, text="Outputs:", font=("Arial", 10, "bold"), bg="#f2f2f2", fg="#000000").grid(row=2, column=2, pady=10)
         
         # Outputs listbox
-        self.outputs_listbox = tk.Listbox(main_frame, height=8)
+        self.outputs_listbox = tk.Listbox(main_frame, height=8, bg="#f2f2f2", fg="#000000", selectbackground="#c0c0c0", selectforeground="#000000")
         self.outputs_listbox.grid(row=3, column=2, sticky=(tk.W, tk.E, tk.N, tk.S), padx=5)
         
         # Output buttons
-        output_btn_frame = ttk.Frame(main_frame)
+        output_btn_frame = tk.Frame(main_frame, bg="#f2f2f2", highlightthickness=0)
         output_btn_frame.grid(row=4, column=2, pady=5)
         ttk.Button(output_btn_frame, text="Add", command=self.add_output).pack(side=tk.LEFT, padx=2)
         ttk.Button(output_btn_frame, text="Edit", command=self.edit_output).pack(side=tk.LEFT, padx=2)
         ttk.Button(output_btn_frame, text="Delete", command=self.delete_output).pack(side=tk.LEFT, padx=2)
         
         # Visual Output
-        ttk.Label(main_frame, text="Visual Output:").grid(row=5, column=0, sticky=tk.W, pady=5)
-        self.visual_output_text = tk.Text(main_frame, height=3, width=40)
+        tk.Label(main_frame, text="Visual Output:", bg="#f2f2f2", fg="#000000").grid(row=5, column=0, sticky=tk.W, pady=5)
+        self.visual_output_text = tk.Text(main_frame, height=3, width=40, bg="#f2f2f2", fg="#000000", insertbackground="#000000")
         self.visual_output_text.grid(row=5, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=5)
         self.visual_output_text.insert("1.0", pill.visual_output)
         
         # Relationships
-        relationships_label = ttk.Label(main_frame, text="Relationships:")
+        relationships_label = tk.Label(main_frame, text="Relationships:", bg="#f2f2f2", fg="#000000")
         relationships_label.grid(row=6, column=0, sticky=tk.W, pady=5)
-        self.relationships_text = tk.Text(main_frame, height=3, width=40)
+        self.relationships_text = tk.Text(main_frame, height=3, width=40, bg="#f2f2f2", fg="#000000", insertbackground="#000000")
         self.relationships_text.grid(row=6, column=1, columnspan=2, sticky=(tk.W, tk.E), pady=5)
         self.relationships_text.insert("1.0", pill.relationships)
         # Click label or double-click text to quickly select relationships
@@ -191,14 +205,14 @@ class DetailWindow:
         self.relationships_text.bind("<Double-Button-1>", lambda e: self.open_relationship_selector())
         
         # Save/Cancel buttons
-        button_frame = ttk.Frame(main_frame)
+        button_frame = tk.Frame(main_frame, bg="#f2f2f2", highlightthickness=0)
         button_frame.grid(row=7, column=0, columnspan=3, pady=10)
         ttk.Button(button_frame, text="Save", command=self.save).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Cancel", command=self.window.destroy).pack(side=tk.LEFT, padx=5)
         
         # Database operations frame
-        db_frame = ttk.LabelFrame(main_frame, text="Database Operations", padding="5")
-        db_frame.grid(row=8, column=0, columnspan=3, pady=10, sticky=(tk.W, tk.E))
+        db_frame = tk.LabelFrame(main_frame, text="Database Operations", bg="#f2f2f2", fg="#000000")
+        db_frame.grid(row=8, column=0, columnspan=3, pady=10, sticky=(tk.W, tk.E), ipadx=5, ipady=5)
         
         # Database buttons
         ttk.Button(db_frame, text="Save to DB", command=self.save_to_db).pack(side=tk.LEFT, padx=5)
@@ -482,7 +496,17 @@ class DetailWindow:
         # Create selection dialog
         dialog = tk.Toplevel(self.window)
         dialog.title("Select Function")
-        dialog.geometry("400x300")
+        # Center dialog on screen
+        try:
+            dialog.update_idletasks()
+            sw = dialog.winfo_screenwidth()
+            sh = dialog.winfo_screenheight()
+            w, h = 400, 300
+            x = max((sw - w) // 2, 0)
+            y = max((sh - h) // 2, 0)
+            dialog.geometry(f"{w}x{h}+{x}+{y}")
+        except Exception:
+            dialog.geometry("400x300")
 
         ttk.Label(dialog, text="Select a function to load:").pack(pady=10)
 
@@ -649,7 +673,17 @@ class DetailWindow:
         # Build dialog UI
         dialog = tk.Toplevel(self.window)
         dialog.title("Select Relationships")
-        dialog.geometry("460x520")
+        # Center dialog on screen
+        try:
+            dialog.update_idletasks()
+            sw = dialog.winfo_screenwidth()
+            sh = dialog.winfo_screenheight()
+            w, h = 460, 520
+            x = max((sw - w) // 2, 0)
+            y = max((sh - h) // 2, 0)
+            dialog.geometry(f"{w}x{h}+{x}+{y}")
+        except Exception:
+            dialog.geometry("460x520")
         dialog.transient(self.window)
         dialog.grab_set()
 
@@ -681,7 +715,7 @@ class DetailWindow:
 
         # Explanation box
         ttk.Label(dialog, text="Explanation:").pack(anchor=tk.W, padx=10, pady=(10, 5))
-        exp_text = tk.Text(dialog, height=5, width=50)
+        exp_text = tk.Text(dialog, height=5, width=50, bg="#f2f2f2", fg="#000000", insertbackground="#000000")
         exp_text.pack(fill=tk.BOTH, expand=False, padx=10)
         if explanation_prefill:
             exp_text.insert("1.0", explanation_prefill)
@@ -1123,7 +1157,7 @@ class ArchitectureMapper:
         
         ttk.Button(toolbar, text="Add Function", command=self.add_function).pack(side=tk.LEFT, padx=5)
         ttk.Button(toolbar, text="Clear All", command=self.clear_all).pack(side=tk.LEFT, padx=5)
-        ttk.Button(toolbar, text="Flow Output", command=self.show_flow_output).pack(side=tk.LEFT, padx=5)
+        # Flow Output removed
         ttk.Button(toolbar, text="Compile", command=self.compile_architecture).pack(side=tk.LEFT, padx=5)
         ttk.Button(toolbar, text="Logical Mapping", command=self.show_logical_mapping).pack(side=tk.LEFT, padx=5)
         ttk.Button(toolbar, text="Instructions", command=self.show_instructions).pack(side=tk.LEFT, padx=5)
@@ -1225,7 +1259,7 @@ class ArchitectureMapper:
             
     def add_function(self):
         """Add a new function pill"""
-        name = simpledialog.askstring("New Function", "Enter function name:")
+        name = simpledialog.askstring("New Function", "Enter function name:", parent=self.root)
         if name:
             # Place in center of visible canvas
             x = self.canvas.winfo_width() // 2 - 60
