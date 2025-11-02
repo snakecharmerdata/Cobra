@@ -841,6 +841,53 @@ class FunctionPill:
             widget = widget.master if hasattr(widget, 'master') else None
         return None
 
+# Auto-size FunctionPill pills based on text length
+try:
+    _FunctionPill_type = FunctionPill
+    if not hasattr(_FunctionPill_type, "_auto_size_patched"):
+        _orig_init_fp = _FunctionPill_type.__init__
+        def _fp_resize_to_text(self, pad_x=24, pad_y=12, min_w=80, min_h=40):
+            try:
+                self.canvas.update_idletasks()
+            except Exception:
+                pass
+            try:
+                bbox = self.canvas.bbox(self.text)
+            except Exception:
+                bbox = None
+            if not bbox:
+                return
+            try:
+                text_w = max(0, bbox[2] - bbox[0])
+                text_h = max(0, bbox[3] - bbox[1])
+                new_w = max(min_w, text_w + pad_x)
+                new_h = max(min_h, text_h + pad_y)
+                self.width = new_w
+                self.height = new_h
+                self.canvas.coords(self.rect, self.x, self.y, self.x + new_w, self.y + new_h)
+                self.canvas.coords(self.text, self.x + new_w/2, self.y + new_h/2)
+            except Exception:
+                pass
+        def _fp_new_init(self, *args, **kwargs):
+            _orig_init_fp(self, *args, **kwargs)
+            try:
+                _fp_resize_to_text(self)
+            except Exception:
+                pass
+        _orig_update_name_fp = _FunctionPill_type.update_name
+        def _fp_new_update_name(self, new_name):
+            _orig_update_name_fp(self, new_name)
+            try:
+                _fp_resize_to_text(self)
+            except Exception:
+                pass
+        _FunctionPill_type.__init__ = _fp_new_init
+        _FunctionPill_type.update_name = _fp_new_update_name
+        _FunctionPill_type._resize_to_text = _fp_resize_to_text
+        _FunctionPill_type._auto_size_patched = True
+except Exception:
+    pass
+
 class DetailWindow:
     """Window for editing function details"""
     def __init__(self, parent, pill):
